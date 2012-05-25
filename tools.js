@@ -13,22 +13,21 @@ exports.cleanupUsername = cleanupUsername;
 // standard fetch function
 function fetch(path, cb){
     var request = psn_http.request('GET', path, {
-      'host': 'us.playstation.com',
-      'Referer': 'http://us.playstation.com/playstation/psn/profile/friends',
-      'User-Agent': 'PS3Application libhttp/4.1.1-000 (CellOS)',
-      'Accept': '*/*'});
-    request.on('response', function(response) {
-      response.setEncoding('utf8');
-      var body = "";
-      response.on('data', function(chunk) {
-        body += chunk;
-      });
-      response.on('end', function() {
-        // pass response on
-        cb(body.replace(/[\t\r\n]/g, ""));
-      });
-    });
-    request.end();
+        'host': 'us.playstation.com',
+        'Referer': 'http://us.playstation.com/playstation/psn/profile/friends',
+        'User-Agent': 'PS3Application libhttp/4.1.1-000 (CellOS)',
+        'Accept': '*/*'});
+    request.on('response', function(response) {
+        response.setEncoding('utf8');
+        var body = "";
+        response.on('data', function(chunk) {
+            body += chunk;
+        });
+        response.on('end', function() {
+            cb(body.replace(/[\t\r\n]/g, ""));
+        });
+    });
+    request.end();
 }
 exports.fetch = fetch;
 
