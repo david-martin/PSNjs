@@ -1,6 +1,6 @@
 # PSN.js
 
-*PSN.js* A simple library for fetching PSN profile images in Node.JS
+*PSN.js* A simple library for fetching PSN profile data in Node.JS
 
 ## Example Use
 
