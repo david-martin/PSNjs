@@ -1,4 +1,4 @@
-var psn = require("../psn.js");
+var psn = require("PSNjs");
 
 // define methods here
 var methods = {

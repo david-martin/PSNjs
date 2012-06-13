@@ -1,8 +1,16 @@
 {
-    "name": "PSN.js",
+    "name": "PSNjs",
+    "description": "A library for fetching user data from PSN",
+    "url": "http://cubehouse.org",
+    "author": "James Holding <jamieholding10@gmail.com>",
 	"version": "0.0.1",
 	"dependencies": {
-        "xml2json":"*"
-	}
+        "xml2json":"*",
+        "hashlib": "*"
+	},
+    "repository": {
+        "type" : "git",
+        "url"  : "https://github.com/cubehouse/PSN.js.git"
+    },
+    "main": "./psn"
 }
-

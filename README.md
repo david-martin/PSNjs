@@ -1,10 +1,16 @@
-# PSN.js
+# PSNjs
 
-*PSN.js* A simple library for fetching PSN profile data in Node.JS
+*PSNjs* A simple library for fetching PSN profile data in Node.JS
+
+## Installing
+
+    npm install -g PSNjs
+
+Alternatively, add PSNjs to your package file or local install with 'npm install PSNjs'.
 
 ## Example Use
 
-    require("psn.js/psn.js").profile("cubehouse", function(data){
+    require("PSNjs").profile("cubehouse", function(data){
       console.log(data);
     });
 
