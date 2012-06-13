@@ -32,3 +32,13 @@
 - Fetch detailed trophy data
 - Specify whether to fetch trophy count or profile data
 - Caching
+
+## Web Service
+
+An example web service is included. By default is runs on port 2265 (will be configurable later).
+
+    node webservice/web.js
+
+Load localhost:2265/get/user/username (or whatever) to get a dataset.
+
+This is very barebones and currently is just a demo.
