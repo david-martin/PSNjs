@@ -108,8 +108,10 @@ function getProfileData(jid, region, cb){
             // fetch trophy stats!
             getProfileStats(jid, function(trop){
                 // merge this object into our return object
-                for(var i in trop){
-                    res[i] = trop[i];
+                if (!trop.error){
+                    for(var i in trop){
+                        res[i] = trop[i];
+                    }
                 }
                 
                 // return
@@ -128,27 +130,32 @@ function getProfileStats(jid, cb){
             var t = d.body.nptrophy;
             
             // make a return object
-            var res = {
-                level:          parseInt(t.level.$t),
-                points:         parseInt(t.point),
-                points_floor:   parseInt(t.level.base),
-                points_next:    parseInt(t.level.next),
-                percent:        parseInt(t.level.progress),
-                trophies:{
-                    platinum:   parseInt(t.types.platinum),
-                    gold:       parseInt(t.types.gold),
-                    silver:     parseInt(t.types.silver),
-                    bronze:     parseInt(t.types.bronze)
-                }
-            };
-            // add up trophy totals
-            res.total = res.trophies.platinum +
-                res.trophies.gold +
-                res.trophies.silver +
-                res.trophies.bronze;
-            
-            // return!
-            cb(res);
+            if (t.result > 0){
+                // we received an error
+                cb({error: "PSN returned error code "+t.result});
+            }else{
+                var res = {
+                    level:          parseInt(t.level.$t),
+                    points:         parseInt(t.point),
+                    points_floor:   parseInt(t.level.base),
+                    points_next:    parseInt(t.level.next),
+                    percent:        parseInt(t.level.progress),
+                    trophies:{
+                        platinum:   parseInt(t.types.platinum),
+                        gold:       parseInt(t.types.gold),
+                        silver:     parseInt(t.types.silver),
+                        bronze:     parseInt(t.types.bronze)
+                    }
+                };
+                // add up trophy totals
+                res.total = res.trophies.platinum +
+                    res.trophies.gold +
+                    res.trophies.silver +
+                    res.trophies.bronze;
+                
+                // return!
+                cb(res);
+            }
         }
     );
 }
