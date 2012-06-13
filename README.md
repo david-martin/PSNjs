@@ -25,7 +25,7 @@ Alternatively, add PSNjs to your package file or local install with 'npm install
 - lang (array of user's languages - WIP - may not be present)
 - level (user's current PSN level)
 - panel (panel image from PS Vita - may not be present)
-- colour (user's profile colour - may not be present)
+- colour (user's profile colour in rgba format - may not be present)
 - trophies (object of trophy counts - platinum, gold, silver and bronze)
 - total (total trophy count)
 - points (current level points)
