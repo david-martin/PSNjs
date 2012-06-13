@@ -78,14 +78,16 @@ function getProfileData(jid, region, cb){
             var res = {
                 username:   p.onlinename,
                 avatar:     p.avatarurl.$t,
-                country:     p.country,
+                country:    p.country,
                 region:     country2region(p.country),
-                psplus:     (p.plusicon)?true:false,
-                aboutme:    p.aboutme
-                //ptlp:       ??
+                psplus:     (p.plusicon)?true:false
             };
-            if (p.ucbgp) res.colour = p.ucbgp.substring(p.ucbgp.length-8);
             
+            // some data that might not be present
+            if (p.aboutme)  res.aboutme = p.aboutme;
+            if (p.ucbgp)    res.colour = p.ucbgp.substring(p.ucbgp.length-8);
+            
+            // get list of languages
             if (p.language1 || p.language2 || p.language3) {
                 res.lang = [];
                 for(var i=1; i<4; i++){
@@ -98,7 +100,8 @@ function getProfileData(jid, region, cb){
             
             // add panel if it exists!
             if (p.panelurl){
-                res.panel =     p.panelurl.$t;
+                res.panel = p.panelurl.$t;
+                // if we haven't got a colour from this user, use their Vita one
                 if (!res.colour) res.colour =    p.panelurl.bgc;
             }
             
