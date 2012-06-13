@@ -1,10 +1,27 @@
 var net = require("./net.js");
 
 // profile configs
-// TODO - find more languages
 var lang = {
-    1: "English"
-}
+    0: "Japanese",
+    1: "English (United States)",
+    2: "French",
+    3: "Spanish",
+    4: "German",
+    5: "Italian",
+    6: "Dutch",
+    7: "Portugese (Portugal)",
+    8: "Russian",
+    9: "Korean",
+    10: "Traditional Chinese",
+    11: "Simplified Chinese",
+    12: "Finnish",
+    13: "Swedish",
+    14: "Danish",
+    15: "Norwegian",
+    16: "Polish",
+    17: "Portuguese (Brazil)",
+    18: "English (United Kingdom)"
+};
 
 // cache
 // TODO: write this somewhere (do these ever change? assume not)
