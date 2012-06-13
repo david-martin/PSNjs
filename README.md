@@ -11,15 +11,24 @@
 ## Profile Object
 
 - username (PSN Username)
-- pic (PSN Avatar)
-- level
-- trophies (total trophy count)
-- platinum
-- gold
-- silver
-- bronze
-- levelprogress (Percentage to the next level)
+- avatar (PSN Avatar)
+- country (user's country code)
+- region (us/eu/jp - WIP)
+- psplus (does this user have PlayStation Plus?)
+- aboutme (PSN profile about me comment - may not be present)
+- lang (array of user's languages - WIP - may not be present)
+- level (user's current PSN level)
+- panel (panel image from PS Vita - may not be present)
+- colour (user's profile colour - may not be present)
+- trophies (object of trophy counts - platinum, gold, silver and bronze)
+- total (total trophy count)
+- points (current level points)
+- points_floor (points required for user's current level)
+- points_next (points required for user's next level)
+- percent (percent complete to next level)
 
 ## Future Versions
 
-Use direct calls to PSN for more data (full profile data, PSN+ status, colour etc.)
+- Fetch detailed trophy data
+- Specify whether to fetch trophy count or profile data
+- Caching
