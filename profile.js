@@ -1,10 +1,47 @@
 var net = require("./net.js");
 
 // profile configs
-// TODO - find more languages
 var lang = {
-    1: "English"
-}
+    0: "Japanese",
+    1: "English (United States)",
+    2: "French",
+    3: "Spanish",
+    4: "German",
+    5: "Italian",
+    6: "Dutch",
+    7: "Portugese (Portugal)",
+    8: "Russian",
+    9: "Korean",
+    10: "Traditional Chinese",
+    11: "Simplified Chinese",
+    12: "Finnish",
+    13: "Swedish",
+    14: "Danish",
+    15: "Norwegian",
+    16: "Polish",
+    17: "Portuguese (Brazil)",
+    18: "English (United Kingdom)"
+};
+
+// map countries to regions
+var countries = {
+    gb: "eu",
+    nl: "eu",
+    us: "us",
+    fi: "eu",
+    hk: "hk",
+    fr: "eu",
+    it: "eu",
+    jp: "jp",
+    ie: "eu",
+    at: "eu",
+    pt: "eu",
+    dk: "eu",
+    de: "eu",
+    ca: "us",
+    au: "eu",
+    tw: "hk"
+};
 
 // cache
 // TODO: write this somewhere (do these ever change? assume not)
@@ -17,7 +54,8 @@ function getProfile(user, cb){
     if (!user) return cb({error: "Invalid username (failed local test)"});
     
     // copy list of regions to check
-    var r = net.regions;
+    var r = [];
+    for(var tmp in net.regions) r.push(net.regions[tmp]);
     
     // callback function to check if user exists
     var check_user = function(d, region){
@@ -33,10 +71,10 @@ function getProfile(user, cb){
             
             return;
         }else{
-            if (!r){
+            if (!r.length){
                 cb({error: "Invalid username (no jid found)"});
             }else{
-                check_next_region();
+                check_region(r.shift());
             }
         }
     };
@@ -53,16 +91,11 @@ function getProfile(user, cb){
         );
     }
     
-    // shortcut function
-    var check_next_region = function(){
-        check_region(r.shift());
-    }
-    
     if (jid_cache[user]){
         getProfileData(jid_cache[user].jid, jid_cache[user].region, cb);
     }else{
         // start checking regions for user's jid
-        check_next_region();
+        check_region(r.shift());
     }
 }
 function getProfileData(jid, region, cb){
@@ -88,11 +121,11 @@ function getProfileData(jid, region, cb){
             if (p.ucbgp)    res.colour = p.ucbgp.substring(p.ucbgp.length-8);
             
             // get list of languages
-            if (p.language1 || p.language2 || p.language3) {
-                res.lang = [];
-                for(var i=1; i<4; i++){
+            res.lang = [];
+            for(var i=1; i<4; i++){
+                if (typeof(p['language'+i])!="object") {
                     var a = languages(p['language'+i]);
-                    if (a){
+                    if (a) {
                         res.lang.push(a);
                     }
                 }
@@ -161,14 +194,14 @@ function getProfileStats(jid, cb){
 }
 
 function country2region(c){
-    // TODO - resolve more of these
-    if (c == "us") return "us";
-    if (c == "jp") return "jp";
+    if (countries[c]) return countries[c];
+    console.log("Unknown country code: "+c);
     return "eu";
 }
 
 function languages(c){
     if (lang[c]) return lang[c];
+    console.log("Unknown language: "+c);
     return false;
 }
 
