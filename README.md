@@ -42,3 +42,11 @@ An example web service is included. By default is runs on port 2265 (will be con
 Load localhost:2265/get/user/username (or whatever) to get a dataset.
 
 This is very barebones and currently is just a demo.
+
+## Thanks
+
+A massive thank you has to go to the PSNAPI website for documenting so much information so clearly.
+
+http://psnapi.org/
+
+If this is useful, please support them.
