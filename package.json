@@ -6,7 +6,7 @@
 	"version": "0.0.1",
 	"dependencies": {
         "xml2json":"*",
-        "hashlib": "*"
+        "node-expat":"*"
 	},
     "repository": {
         "type" : "git",
