@@ -6,9 +6,16 @@ var psn_http = http.createClient(80, 'us.playstation.com');
 
 // clean up a given username, PSN (according to Wikipedia) only accepts alphanumberic, underscores and hyphens
 function cleanupUsername(u){
-    return u.replace(/[^a-zA-Z0-9_-]/g, "");
+    return u.replace(/[^a-zA-Z0-9_-\|]/g, "");
 }
-exports.cleanupUsername = cleanupUsername;
+function checkUsername(u){
+    u = cleanupUsername(u);
+    if ( (u.length < 2) || (u.length>21) ){
+        return false;
+    }
+    return u;
+}
+exports.checkUsername = checkUsername;
 
 // standard fetch function
 function fetch(path, cb){

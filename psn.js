@@ -9,6 +9,6 @@ exports.avatar = function(profile, cb){
     require("./profile.js").fetch(profile, "pic", cb);
 };
 // Grab user's level
-exports.avatar = function(profile, cb){
+exports.level = function(profile, cb){
     require("./profile.js").fetch(profile, "level", cb);
 };
