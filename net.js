@@ -23,7 +23,8 @@ var profilepoints = {
 exports.profilepoints = profilepoints;
 
 // lib
-var parser = require('xml2json');
+var xml2js = require("xml2js");
+var parser = new xml2js.Parser({explicitRoot:true});
 var digest = require("./digest.js");
 
 var regions = [];
@@ -112,11 +113,14 @@ function makeReq(digestClient, hdrs, data, d, cb, i){
             response.addListener('end', function () {
                 // convert XML if present
                 if (/^<\?xml/.test(body)){
-                    body = parser.toJson(body, {object: true});
+                    parser.parseString(body, function(err, r){
+                        body = r;
+                        cb({headers: response.headers, body: body});
+                    });
+                }else{
+                    // callback data
+                    cb({headers: response.headers, body: body});
                 }
-                
-                // callback data
-                cb({headers: response.headers, body: body});
             });
         }else{
             // failed. Try again!

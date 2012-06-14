@@ -5,8 +5,7 @@
     "author": "James Holding <jamieholding10@gmail.com>",
 	"version": "0.0.1",
 	"dependencies": {
-        "xml2json":"*",
-        "node-expat":"*"
+        "xml2js":"*"
 	},
     "repository": {
         "type" : "git",

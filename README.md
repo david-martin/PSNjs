@@ -8,10 +8,6 @@
 
 Alternatively, add PSNjs to your package file or local install with 'npm install PSNjs'.
 
-If you are recieving errors with node-expat, enture you have installed the libexpat-dev package.
-
-    sudo apt-get install libexpat-dev
-
 ## Installing from Git
 
 CLone the repo. cd into the directory and link to gain access to PSNjs on your system.

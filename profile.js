@@ -110,7 +110,7 @@ function getProfileData(jid, region, cb){
             // collect data we know will exist
             var res = {
                 username:   p.onlinename,
-                avatar:     p.avatarurl.$t,
+                avatar:     p.avatarurl['#'],
                 country:    p.country,
                 region:     country2region(p.country),
                 psplus:     (p.plusicon)?true:false
@@ -133,9 +133,9 @@ function getProfileData(jid, region, cb){
             
             // add panel if it exists!
             if (p.panelurl){
-                res.panel = p.panelurl.$t;
+                res.panel = p.panelurl['#'];
                 // if we haven't got a colour from this user, use their Vita one
-                if (!res.colour) res.colour =    p.panelurl.bgc;
+                if (!res.colour) res.colour =    p.panelurl['@'].bgc;
             }
             
             // fetch trophy stats!
@@ -168,16 +168,16 @@ function getProfileStats(jid, cb){
                 cb({error: "PSN returned error code "+t.result});
             }else{
                 var res = {
-                    level:          parseInt(t.level.$t),
+                    level:          parseInt(t.level['#']),
                     points:         parseInt(t.point),
-                    points_floor:   parseInt(t.level.base),
-                    points_next:    parseInt(t.level.next),
-                    percent:        parseInt(t.level.progress),
+                    points_floor:   parseInt(t.level['@'].base),
+                    points_next:    parseInt(t.level['@'].next),
+                    percent:        parseInt(t.level['@'].progress),
                     trophies:{
-                        platinum:   parseInt(t.types.platinum),
-                        gold:       parseInt(t.types.gold),
-                        silver:     parseInt(t.types.silver),
-                        bronze:     parseInt(t.types.bronze)
+                        platinum:   parseInt(t.types['@'].platinum),
+                        gold:       parseInt(t.types['@'].gold),
+                        silver:     parseInt(t.types['@'].silver),
+                        bronze:     parseInt(t.types['@'].bronze)
                     }
                 };
                 // add up trophy totals
