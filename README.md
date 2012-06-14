@@ -12,6 +12,14 @@ If you are recieving errors with node-expat, enture you have installed the libex
 
     sudo apt-get install libexpat-dev
 
+## Installing from Git
+
+CLone the repo. cd into the directory and link to gain access to PSNjs on your system.
+
+    git clone https://github.com/cubehouse/PSNjs.git
+    cd PSNjs
+    sudo npm link
+
 ## Example Use
 
     require("PSNjs").profile("cubehouse", function(data){
