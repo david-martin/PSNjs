@@ -8,6 +8,10 @@
 
 Alternatively, add PSNjs to your package file or local install with 'npm install PSNjs'.
 
+If you are recieving errors with node-expat, enture you have installed the libexpat-dev package.
+
+    sudo apt-get install libexpat-dev
+
 ## Example Use
 
     require("PSNjs").profile("cubehouse", function(data){
