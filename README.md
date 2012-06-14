@@ -10,7 +10,7 @@ Alternatively, add PSNjs to your package file or local install with 'npm install
 
 ## Installing from Git
 
-CLone the repo. cd into the directory and link to gain access to PSNjs on your system.
+Clone the repo. cd into the directory and link to gain access to PSNjs on your system.
 
     git clone https://github.com/cubehouse/PSNjs.git
     cd PSNjs
