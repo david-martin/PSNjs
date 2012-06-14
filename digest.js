@@ -1,26 +1,39 @@
 /*
  * LICENSING: node-http-digest is in the public domain.
  * */
-var http = require("http");
-var hashlib = require("./hashlib.node");
+ 
+// Modified by James Holding to use crypto instead of barely supported hashlib
+
+var http = require('http');
+var crypto = require('crypto');
+
+function md5er(a){
+    return crypto.createHash('md5').update(a).digest('hex');
+}
 
 var wwwAuthMap = {
-	"realm" : "realm=\"",
-	"nonce" : "nonce=\"",
-	"qop" : "qop=\"",
-	"opaque" : "opaque=\"",
-	"stale" : "stale="
+	realm  : 'realm="',
+	nonce  : 'nonce="',
+	qop    : 'qop="',
+	opaque : 'opaque="',
+	stale  : 'stale='
 };
 
-function DigestClient(client, username, password, expectedRealm){
+function DigestClient(client, username, password, expectedRealm) {
 	var self = this;
 	self.client = client;
 	self.username = username;
 	self.password = password;
 	self.expectedRealm = expectedRealm;
 
-	/* FIXME This is bad, should use a random cnonce! */
-	self.cnonce = "cdb0e64d1ded02dd";
+	// generate random cnonce
+    self.cnonce = '';
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
+    var string_length = 16;
+	for (var i=0; i<string_length; i++) {
+		var rnum = Math.floor(Math.random() * chars.length);
+		self.cnonce += chars.substring(rnum,rnum+1);
+	}
 
 	/* Initialize qop */
 	self.qop = null;
@@ -32,78 +45,74 @@ function DigestClient(client, username, password, expectedRealm){
 	return self;
 }
 
-DigestClient.prototype.request = function(method, path, request_headers){
+DigestClient.prototype.request = function(method, path, request_headers) {
 	var self = this;
 
 	/* If method omitted, assume it was GET. */
-  if(typeof(path) != "string"){
-    headers = path;
-    url = method;
-    method = "GET";
-  }
+    if (typeof(path) != 'string') {
+        method = 'GET';
+    }
 
 	/* If we have a definite HA1 then send authentication header. */
-	if(self.HA1){
-		var HA2 = (method + ":" + path);
+	if (self.HA1) {
+		var HA2 = (method + ':' + path);
 		/* FIXME Handle "auth-int" case! */
 		//if(self.qop == "auth" || self.qop == "auth-int"){
 		//}
 
 		/* Calculate 8 digit hex nc value. */
 		var nc = self.nonceCount.toString(16);
-		while(nc.length < 8)
-			nc = "0" + nc;
+		while (nc.length < 8) nc = "0" + nc;
 
-		HA2 = hashlib.md5(HA2);
+        HA2 = md5er(HA2);
 
 		/* Calculate middle portion of undigested 'response' */
 		var middle = self.nonce;
-		if(self.qop == "auth" || self.qop == "auth-int"){
-			middle += ":" + nc + ":" + self.cnonce
-				+ ":" + self.qop;
+		if (self.qop == 'auth' || self.qop == 'auth-int') {
+			middle += ':' + nc + ':' + self.cnonce +
+                      ':' + self.qop;
 		}
 
 		/* Digest the response. */
 		var response = self.HA1 + ":" + middle + ":" + HA2;
-		response = hashlib.md5(response);
+        response = md5er(response);
 
 		/* Assemble the header value. */
-		var hdrVal = "Digest username=\"" + self.username
-			+ "\", realm=\"" + self.realm
-			+ "\", nonce=\"" + self.nonce
-			+ "\", uri=\"" + path + "\"";
+		var hdrVal = 'Digest username="' + self.username +
+                     '", realm="' + self.realm +
+                     '", nonce="' + self.nonce +
+                     '", uri="' + path + '"';
 
-		if(self.qop){
-			hdrVal += ", qop=" + self.qop
-				+ ", nc=" + nc
-				+ ", cnonce=\"" + self.cnonce + '"';
+		if (self.qop) {
+			hdrVal += ', qop=' + self.qop +
+                      ', nc=' + nc +
+                      ', cnonce="' + self.cnonce + '"';
 		}
 
-		hdrVal += ", response=\"" + response + '"';
-		if(self.opaque)
-			hdrVal += ", opaque=\"" + self.opaque + '"';
+		hdrVal += ', response="' + response + '"';
+		if (self.opaque) hdrVal += ', opaque="' + self.opaque + '"';
 
-		request_headers["authorization"] = hdrVal;
+        request_headers.authorization = hdrVal;
 	}
 
-	req = self.client.request(method, path, request_headers);
+	var req = self.client.request(method, path, request_headers);
 
-	req.addListener("response", function(response){
+	req.addListener("response", function(response) {
 		/* If not authorized, then probably need to update nonce. */
-		if(401 == response.statusCode){
+		if (401 == response.statusCode) {
 			var a = response.headers["www-authenticate"];
-			if(a){
+			if (a) {
 				/* Update server values. */
-				for(v in wwwAuthMap){
+				for (var v in wwwAuthMap) {
 					var idx = a.indexOf(wwwAuthMap[v]);
-					if(idx != -1){
+					if (idx != -1) {
 						idx += wwwAuthMap[v].length;
 
 						var e = (v != "stale") ? a.indexOf('"', idx) : a.indexOf(',', idx);
 
-						/* Correct for the odd ball stale (has no quotes..)
-						 * FIXME handle badly formatted string? */
-						if(-1 == e){
+                        /* Correct for the odd ball stale (has no quotes..)
+                         * FIXME handle badly formatted string? */
+						if (-1 == e) {
 							if("stale" == v)
 								e = a.length;
 						}
@@ -111,32 +120,29 @@ DigestClient.prototype.request = function(method, path, request_headers){
 						self[v] = a.substring(idx, e);
 					}
 				}
-			}
-			else{
+			} else {
 				/* FIXME Server is not using auth digest? */
 			}
 
 			/* Verify correct realm. */
-			if(self.expectedRealm && self.realm != self.expectedRealm){
+			if(self.expectedRealm && self.realm != self.expectedRealm) {
 				/* FIXME realm mismatch! */
 			}
 
 			/* If have previous auth info, then try to revalidate. */
-			if(self.HA1){
+			if(self.HA1) {
 				/* If did not recv stale, then have bad credentials. */
-				if(null == self.stale){
+				if(null === self.stale) {
 					/* FIXME some kind of exception? */
 				}
-			}
-			else{
+			} else {
 				/* Initialize HA1. */
 				self.HA1 = self.username + ":" + self.realm + ":" + self.password;
-				self.HA1 = hashlib.md5(self.HA1);
+				self.HA1 = md5er(self.HA1);
 			}
 
 			/* HACK FIXME Just dropping back to auth! */
-			if(self.qop)
-				self.qop = "auth";
+			if(self.qop) self.qop = "auth";
 
 			/* Start with 0 nonceCount. */
 			self.nonceCount = 0;
@@ -154,9 +160,9 @@ DigestClient.prototype.request = function(method, path, request_headers){
 	});
 
 	return req;
-}
+};
 
-exports.createClient = function(port, host, username, password, expectedRealm){
+exports.createClient = function(port, host, username, password, expectedRealm) {
 	var c = http.createClient(port, host);
 	return new DigestClient(c, username, password);
-}
+};
