@@ -40,6 +40,20 @@ Clone the repo. cd into the directory and link to gain access to PSNjs on your s
 - points_floor (points required for user's current level)
 - points_next (points required for user's next level)
 - percent (percent complete to next level)
+- games (array of objects, more detail below)
+
+## Game Object
+
+Profile data returns an array of game objects with the following information:
+
+- id (official game ncommid)
+- title (game's name)
+- icon (URL of game's official icon)
+- complete (percentage complete for user)
+- trophies (object of trophy counts - platinum, gold, silver and bronze)
+- total (total trophy count)
+
+Note, currently only PS3 games are returned.
 
 ## Future Versions
 
