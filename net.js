@@ -48,12 +48,30 @@ function fetch(url, data, auth, cb){
     }
     
     if (!auth){
-        // no auth?... do normal request! :D
-        var request = require("http").request(((data)?'POST':'GET'), d.path, {
-        'host': d.hostname,
-        //'Referer': 'http://us.playstation.com/playstation/psn/profile/friends',
-        'User-Agent': 'PS3Application libhttp/4.1.1-000 (CellOS)',
-        'Accept': '*/*'});
+        // no auth?... do normal request!
+        var options = {
+            'method': ((data.postdata)?'POST':'GET'),
+            'host': d.hostname,
+            'path': d.path,
+            'Accept': '*/*',
+            'headers': {
+                "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Charset":"2ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+                "Accept-Language":"en-GB,en-US;q=0.8,en;q=0.6",
+                'Cache-Control':'max-age=0',
+                'Connection':'keep-alive',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1171.0 Safari/537.1'
+            }
+        };
+        
+        if (data.referer) options.headers.Referer = data.referer;
+        
+        if (data.postdata){
+            options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            options.headers['Content-Length'] = data.length;
+        }
+        
+        var request = require("http").request(options);
         request.on('response', function(response) {
             response.setEncoding('utf8');
             var body = "";
@@ -61,10 +79,10 @@ function fetch(url, data, auth, cb){
                 body += chunk;
             });
             response.on('end', function() {
-                cb(body.replace(/[\t\r\n]/g, ""));
+                cb({headesr: response.headers, body: body.replace(/[\t\r\n]/g, "")});
             });
         });
-        if (data) request.write(data);
+        if (data.postdata) request.write(data.postdata);
         request.end();
     }else{
         // auth? use digest client
