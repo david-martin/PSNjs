@@ -40,7 +40,8 @@ var countries = {
     de: "eu",
     ca: "us",
     au: "eu",
-    tw: "hk"
+    tw: "hk",
+    es: "eu"
 };
 
 // cache
@@ -67,7 +68,7 @@ function getProfile(user, cb){
             }
             
             // fetch profile data
-            getProfileData(d.body.searchjid.jid, region, cb);
+            nextstep();
             
             return;
         }else{
@@ -91,8 +92,17 @@ function getProfile(user, cb){
         );
     }
     
+    var nextstep = function(){
+        getProfileData(jid_cache[user].jid, jid_cache[user].region, function(profile){
+            require("./games.js").getUserGames(jid_cache[user].jid, function(games){
+                profile.games = games;
+                cb(profile);
+            });
+        });
+    }
+    
     if (jid_cache[user]){
-        getProfileData(jid_cache[user].jid, jid_cache[user].region, cb);
+        nextstep();
     }else{
         // start checking regions for user's jid
         check_region(r.shift());
