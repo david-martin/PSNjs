@@ -2,3 +2,5 @@
 
 // === profile functions
 exports.profile = require("./profile.js").fetch;
+
+exports.games = require("./games.js").getGamesList;
