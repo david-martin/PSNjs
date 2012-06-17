@@ -2,11 +2,9 @@ var psn = require("../psn.js");
 
 // define methods here
 var methods = {
-    user:{
-        get: function(args, cb){
-            if (!args[0]) return {error: "No user supplied"};
-            psn.profile(args[0], cb);
-        }
+    user:function(args, cb){
+        if (!args[0]) return {error: "No user supplied"};
+        psn.profile(args[0], cb);
     }
 };
 
