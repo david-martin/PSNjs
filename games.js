@@ -87,9 +87,11 @@ function getCommGames(user, cb){
             // fetch trophy counts
             var regex_trophycount = /class="trophycontent">\s*?([0-9]+)/g;
             var trophies = [];
+            var total = 0;
             var counts = regex_trophycount.exec(data[i]);
             while (counts !== null){
                 trophies.push(counts[1]);
+                total += counts[1];
                 counts = regex_trophycount.exec(data[i]);
             }
             
@@ -104,7 +106,8 @@ function getCommGames(user, cb){
                     gold: trophies[2],
                     silver: trophies[1],
                     bronze: trophies[0]
-                }
+                },
+                total: total
             });
         }
         
