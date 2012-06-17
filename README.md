@@ -30,7 +30,7 @@ Clone the repo. cd into the directory and link to gain access to PSNjs on your s
 - region (us/eu/jp - WIP)
 - psplus (does this user have PlayStation Plus?)
 - aboutme (PSN profile about me comment - may not be present)
-- lang (array of user's languages - WIP - may not be present)
+- lang (array of user's languages - may not be present)
 - level (user's current PSN level)
 - panel (panel image from PS Vita - may not be present)
 - colour (user's profile colour in rgba format - may not be present)
