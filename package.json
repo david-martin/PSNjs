@@ -3,7 +3,7 @@
     "description": "A library for fetching user data from PSN",
     "url": "http://cubehouse.org",
     "author": "James Holding <jamieholding10@gmail.com>",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"dependencies": {
         "xml2js":"*"
 	},
