@@ -93,12 +93,7 @@ function getProfile(user, cb){
     }
     
     var nextstep = function(){
-        getProfileData(jid_cache[user].jid, jid_cache[user].region, function(profile){
-            require("./games.js").getUserGames(jid_cache[user].jid, function(games){
-                profile.games = games;
-                cb(profile);
-            });
-        });
+        getProfileData(jid_cache[user].jid, jid_cache[user].region, cb);
     }
     
     if (jid_cache[user]){

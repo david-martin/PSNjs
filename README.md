@@ -21,6 +21,10 @@ Clone the repo. cd into the directory and link to gain access to PSNjs on your s
     require("PSNjs").profile("cubehouse", function(data){
       console.log(data);
     });
+    
+    require("PSNjs").games("cubehouse", function(data){
+      console.log(data);
+    });
 
 ## Profile Object
 
@@ -40,11 +44,10 @@ Clone the repo. cd into the directory and link to gain access to PSNjs on your s
 - points_floor (points required for user's current level)
 - points_next (points required for user's next level)
 - percent (percent complete to next level)
-- games (array of objects, more detail below)
 
 ## Game Object
 
-Profile data returns an array of game objects with the following information:
+Game data returns an array of game objects with the following information:
 
 - id (official game ncommid)
 - title (game's name)
