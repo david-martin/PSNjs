@@ -172,26 +172,44 @@ function getProfileStats(jid, cb){
                 // we received an error
                 cb({error: "PSN returned error code "+t.result});
             }else{
-                var res = {
-                    level:          parseInt(t.level['#']),
-                    points:         parseInt(t.point),
-                    points_floor:   parseInt(t.level['@'].base),
-                    points_next:    parseInt(t.level['@'].next),
-                    percent:        parseInt(t.level['@'].progress),
-                    trophies:{
-                        platinum:   parseInt(t.types['@'].platinum),
-                        gold:       parseInt(t.types['@'].gold),
-                        silver:     parseInt(t.types['@'].silver),
-                        bronze:     parseInt(t.types['@'].bronze)
-                    }
-                };
-                // add up trophy totals
-                res.total = res.trophies.platinum +
-                    res.trophies.gold +
-                    res.trophies.silver +
-                    res.trophies.bronze;
-                
-                // return!
+                var res = {};
+                if (!t.level){
+                    res = {
+                        level:          parseInt(t.level['#']),
+                        points:         parseInt(t.point),
+                        points_floor:   parseInt(t.level['@'].base),
+                        points_next:    parseInt(t.level['@'].next),
+                        percent:        parseInt(t.level['@'].progress),
+                        trophies:{
+                            platinum:   parseInt(t.types['@'].platinum),
+                            gold:       parseInt(t.types['@'].gold),
+                            silver:     parseInt(t.types['@'].silver),
+                            bronze:     parseInt(t.types['@'].bronze)
+                        }
+                    };
+                    // add up trophy totals
+                    res.total = res.trophies.platinum +
+                        res.trophies.gold +
+                        res.trophies.silver +
+                        res.trophies.bronze;
+                    
+                    // return!
+                }else{
+                    res = {
+                        level:          0,
+                        points:         0,
+                        points_floor:   0,
+                        points_next:    0,
+                        percent:        0,
+                        trophies:{
+                            platinum:   0,
+                            gold:       0,
+                            silver:     0,
+                            bronze:     0
+                        },
+                        total: 0
+                    };
+                }
                 cb(res);
             }
         }
