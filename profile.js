@@ -41,7 +41,8 @@ var countries = {
     ca: "us",
     au: "eu",
     tw: "hk",
-    es: "eu"
+    es: "eu",
+    ch: "eu"
 };
 
 // cache
@@ -173,7 +174,8 @@ function getProfileStats(jid, cb){
                 cb({error: "PSN returned error code "+t.result});
             }else{
                 var res = {};
-                if (!t.level){
+                if (t.level){
+                    if (!t.level['#']) t.level['#'] = 0;
                     res = {
                         level:          parseInt(t.level['#']),
                         points:         parseInt(t.point),
@@ -219,7 +221,7 @@ function getProfileStats(jid, cb){
 function country2region(c){
     if (countries[c]) return countries[c];
     console.log("Unknown country code: "+c);
-    return "eu";
+    return "unknown";
 }
 
 function languages(c){
