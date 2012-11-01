@@ -56,7 +56,7 @@ function fetch(url, data, auth, cb){
             'Accept': '*/*',
             'headers': {
                 "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Accept-Charset":"2ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+                "Accept-Charset":"utf-8",
                 "Accept-Language":"en-GB,en-US;q=0.8,en;q=0.6",
                 'Cache-Control':'max-age=0',
                 'Connection':'keep-alive',
@@ -73,7 +73,7 @@ function fetch(url, data, auth, cb){
         
         var request = require("http").request(options);
         request.on('response', function(response) {
-            response.setEncoding('utf8');
+            response.setEncoding('utf-8');
             var body = "";
             response.on('data', function(chunk) {
                 body += chunk;
