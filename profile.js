@@ -115,22 +115,22 @@ function getProfileData(jid, region, cb){
             
             // collect data we know will exist
             var res = {
-                username:   p.onlinename,
-                avatar:     p.avatarurl['#'],
-                country:    p.country,
-                region:     country2region(p.country),
-                psplus:     (p.plusicon)?true:false
+                username:   p.onlinename[0],
+                avatar:     p.avatarurl[0]['_'],
+                country:    p.country[0],
+                region:     country2region(p.country[0]),
+                psplus:     (p.plusicon[0])?true:false
             };
             
             // some data that might not be present
-            if (p.aboutme)  res.aboutme = p.aboutme;
-            if (p.ucbgp)    res.colour = p.ucbgp.substring(p.ucbgp.length-8);
+            if (p.aboutme)  res.aboutme = p.aboutme[0];
+            if (p.ucbgp)    res.colour = p.ucbgp[0].substring(p.ucbgp[0].length-8);
             
             // get list of languages
             res.lang = [];
             for(var i=1; i<4; i++){
-                if (typeof(p['language'+i])!="object") {
-                    var a = languages(p['language'+i]);
+                if (typeof(p['language'+i][0])!="object") {
+                    var a = languages(p['language'+i][0]);
                     if (a) {
                         res.lang.push(a);
                     }
@@ -138,10 +138,10 @@ function getProfileData(jid, region, cb){
             }
             
             // add panel if it exists!
-            if (p.panelurl){
+            if (p.panelurl && p.panelurl[0]['$']){
                 res.panel = p.panelurl['#'];
                 // if we haven't got a colour from this user, use their Vita one
-                if (!res.colour) res.colour =    p.panelurl['@'].bgc;
+                if (!res.colour) res.colour =    p.panelurl[0]['$'].bgc;
             }
             
             // fetch trophy stats!
@@ -175,18 +175,18 @@ function getProfileStats(jid, cb){
             }else{
                 var res = {};
                 if (t.level){
-                    if (!t.level['#']) t.level['#'] = 0;
+                    if (!t.level[0]['#']) t.level[0]['#'] = 0;
                     res = {
-                        level:          parseInt(t.level['#']),
-                        points:         parseInt(t.point),
-                        points_floor:   parseInt(t.level['@'].base),
-                        points_next:    parseInt(t.level['@'].next),
-                        percent:        parseInt(t.level['@'].progress),
+                        level:          parseInt(t.level[0]['#']),
+                        points:         parseInt(t.point[0]),
+                        points_floor:   parseInt(t.level[0]['$'].base),
+                        points_next:    parseInt(t.level[0]['$'].next),
+                        percent:        parseInt(t.level[0]['$'].progress),
                         trophies:{
-                            platinum:   parseInt(t.types['@'].platinum),
-                            gold:       parseInt(t.types['@'].gold),
-                            silver:     parseInt(t.types['@'].silver),
-                            bronze:     parseInt(t.types['@'].bronze)
+                            platinum:   parseInt(t.types[0]['$'].platinum),
+                            gold:       parseInt(t.types[0]['$'].gold),
+                            silver:     parseInt(t.types[0]['$'].silver),
+                            bronze:     parseInt(t.types[0]['$'].bronze)
                         }
                     };
                     // add up trophy totals
