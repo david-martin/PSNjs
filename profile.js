@@ -119,7 +119,7 @@ function getProfileData(jid, region, cb){
                 avatar:     p.avatarurl[0]['_'],
                 country:    p.country[0],
                 region:     country2region(p.country[0]),
-                psplus:     (p.plusicon[0])?true:false
+                psplus:     (p.plusicon)?true:false
             };
             
             // some data that might not be present
