@@ -42,7 +42,13 @@ var countries = {
     au: "eu",
     tw: "hk",
     es: "eu",
-    ch: "eu"
+    ch: "eu",
+    be: "eu",
+    sa: "eu",
+    no: "eu",
+    gr: "eu",
+    mx: "us",
+    nz: "eu"
 };
 
 // cache
