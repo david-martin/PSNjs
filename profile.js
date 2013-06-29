@@ -145,7 +145,7 @@ function getProfileData(jid, region, cb){
             
             // add panel if it exists!
             if (p.panelurl && p.panelurl[0]['$']){
-                res.panel = p.panelurl['#'];
+                res.panel = p.panelurl[0]['_'];
                 // if we haven't got a colour from this user, use their Vita one
                 if (!res.colour) res.colour =    p.panelurl[0]['$'].bgc;
             }
@@ -181,9 +181,9 @@ function getProfileStats(jid, cb){
             }else{
                 var res = {};
                 if (t.level){
-                    if (!t.level[0]['#']) t.level[0]['#'] = 0;
+                    if (!t.level[0]['_']) t.level[0]['_'] = 0;
                     res = {
-                        level:          parseInt(t.level[0]['#']),
+                        level:          parseInt(t.level[0]['_']),
                         points:         parseInt(t.point[0]),
                         points_floor:   parseInt(t.level[0]['$'].base),
                         points_next:    parseInt(t.level[0]['$'].next),
